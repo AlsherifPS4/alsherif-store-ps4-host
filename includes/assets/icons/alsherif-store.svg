@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title>Alsherif Store</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#08142f"/>
+      <stop offset="1" stop-color="#020611"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#00d5ff"/>
+      <stop offset="1" stop-color="#1265ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="26" fill="url(#bg)"/>
+  <path d="M64 17 30 91h17l7-16h23l7 16h17L64 17Zm0 31 7 14H57l7-14Z" fill="#f8fbff"/>
+  <path d="M28 104h72" stroke="url(#blue)" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="45" cy="104" r="4" fill="#00d5ff"/>
+  <circle cx="83" cy="104" r="4" fill="#1265ff"/>
+</svg>
