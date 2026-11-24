@@ -27,7 +27,7 @@
     <link rel="icon" href="./includes/assets/icons/alsherif-store.svg" type="image/svg+xml">
     <link rel="stylesheet" id="main-stylesheet" href="">
     <link rel="stylesheet" id="color-stylesheet" href="">
-    <link rel="stylesheet" id="alsherif-branding-stylesheet" href="./includes/css/alsherif-branding.css?v=20261120-2">
+    <link rel="stylesheet" id="alsherif-branding-stylesheet" href="./includes/css/alsherif-branding.css?v=20261124-3">
     <script>
         // Prevent "Theme Flash" by applying the href before the body renders
         var savedTheme = localStorage.getItem('theme') || "index";
@@ -303,6 +303,7 @@
                                 <option value="13.50">13.50</option>
                                 <option value="13.52">13.52</option>
                                 <option value="14.00">14.00</option>
+                                <option value="14.02">14.02</option>
                             </select>
                         </div>
                     </div>
@@ -404,6 +405,7 @@
                     <p id="fw11">11.xx</p>
                     <p id="fw12">12.xx</p>
                     <p id="fw13">13.xx</p>
+                    <p id="fw140x">14.0x</p>
                 </div>
             </div>
             <small id="payloaderFirmwareSemiSupported">
@@ -453,12 +455,20 @@
                 <h3 class="text-lg font-semibold mb-2" id="ghVer">GoldHEN Versions</h3>
                 <div class="radio-group space-y-2">
                     <label class="flex items-center text-white/80">
-                        <input type="radio" name="goldhen" value="GHv2.4b18.12" onchange="setGoldHENVer(this.value);">
-                        <p>GoldHEN v2.4b18.12 - </p>
+                        <input type="radio" name="goldhen" value="GHv2.4b18.14" onchange="setGoldHENVer(this.value);">
+                        <p>GoldHEN v2.4b18.14 - </p>
                         <pre id="latestVer"> Latest</pre>
                     </label>
                     <details>
                         <summary>Other versions</summary>
+                        <label class="flex items-center text-white/80">
+                            <input type="radio" name="goldhen" value="GHv2.4b18.13" onchange="setGoldHENVer(this.value);">
+                            <p>GoldHEN v2.4b18.13</p>
+                        </label>
+                        <label class="flex items-center text-white/80">
+                            <input type="radio" name="goldhen" value="GHv2.4b18.12" onchange="setGoldHENVer(this.value);">
+                            <p>GoldHEN v2.4b18.12</p>
+                        </label>
                         <label class="flex items-center text-white/80">
                             <input type="radio" name="goldhen" value="GHv2.4b18.10"
                                 onchange="setGoldHENVer(this.value);">
@@ -525,6 +535,10 @@
                     <label class="flex items-center text-white/80" id="bpfDoubleFreeExp">
                         <input type="radio" name="exploitChain" value="8" onchange="exploitChain(this.value);">
                         <p id="bpfDoubleFree">Bpf Double Free</p>
+                    </label>
+                    <label class="flex items-center text-white/80" id="slopkitAfterglowExp">
+                        <input type="radio" name="exploitChain" value="9" onchange="exploitChain(this.value);">
+                        <p id="slopkitAfterglow">SlopKit Afterglow</p>
                     </label>
                 </div>
             </div>
