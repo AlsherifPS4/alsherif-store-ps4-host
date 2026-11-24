@@ -66,7 +66,8 @@
     align-items: center !important;
     justify-content: center !important;
     gap: 0.8rem !important;
-    width: min(84vw, 350px) !important;
+    width: 84vw !important;
+    max-width: 350px !important;
     min-height: 64px !important;
     margin: 1.2rem auto 0.6rem !important;
     padding: 0.95rem 1.15rem !important;
@@ -170,12 +171,15 @@
 /* Keep the hero usable on small screens and in shorter PS4-browser viewports. */
 @media (max-width: 900px) {
     .alsherif-hero-brand-chip { font-size: 0.68rem; letter-spacing: 0.08em; }
-    #initial-screen.alsherif-hero::before { background-position: center center; opacity: 0.38; }
-    #initial-screen.alsherif-hero #ps-logo-container.alsherif-launch-button { width: min(88vw, 330px) !important; }
+    #initial-screen.alsherif-hero { background-position: center, center, center center; }
+    #initial-screen.alsherif-hero #ps-logo-container.alsherif-launch-button {
+        width: 88vw !important;
+        max-width: 330px !important;
+    }
 }
 
 @media (max-height: 700px) {
-    #initial-screen.alsherif-hero::before { background-position: center 38%; opacity: 0.35; }
+    #initial-screen.alsherif-hero { background-position: center, center, center 38%; }
     #initial-screen.alsherif-hero #ps-logo-container.alsherif-launch-button { min-height: 54px !important; margin-top: 0.55rem !important; }
     .alsherif-hero-brand-chip { margin-top: 0.1rem; padding: 0.4rem 0.75rem; }
     #click-to-start-text { margin-top: 0.5rem !important; }
