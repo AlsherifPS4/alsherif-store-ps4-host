@@ -1248,6 +1248,10 @@ async function doPSFreeExploit() {
     await sleep(50); // Wait 50ms
     const [fsets, indices] = prepare_uaf();
     const [view, [view2, pop]] = await uaf_ssv(fsets, indices[1], indices[0]);
+    // Stage 1 succeeded; reset only the Stage-1 retry counter before later stages.
+    if (typeof storage !== "undefined" && storage.session && storage.session.remove) {
+      storage.session.remove("psfreeUafRetryCount");
+    }
     window.log("PSFree STAGE 2/3: Get String Relative Read Primitive");
     await sleep(50); // Wait 50ms
     const rdr = await make_rdr(view);
@@ -1260,6 +1264,27 @@ async function doPSFreeExploit() {
     await make_arw(rdr, view2, pop);
     window.log("Achieved Arbitrary R/W\n");
   } catch (error) {
+    // This specific Stage-1 UAF failure occurs before the exploit has obtained any
+    // memory primitive. When Auto-Retry is enabled, a clean page reload is safe and
+    // lets WebKit rebuild the heap layout. Bound retries to avoid an endless loop.
+    var isSafeUafFailure = String(error).indexOf("Failed SerializedScriptValue UAF") !== -1;
+    if (isSafeUafFailure && typeof storage !== "undefined" &&
+        storage.getBoolean && storage.session && storage.session.getNumber) {
+      var autoRetryEnabled = storage.getBoolean("autoJbRetry", true);
+      var retryCount = storage.session.getNumber("psfreeUafRetryCount", 0);
+      if (autoRetryEnabled && retryCount < 3) {
+        retryCount++;
+        storage.session.set("psfreeUafRetryCount", retryCount);
+        window.log("PSFree Stage 1 did not win the UAF race. Reloading for automatic retry " +
+          retryCount + "/3...", "orange");
+        setTimeout(function () { window.location.reload(); }, 1200);
+        return 0;
+      }
+      if (retryCount >= 3 && storage.session.remove) {
+        storage.session.remove("psfreeUafRetryCount");
+        window.log("Automatic PSFree retry limit reached. Refresh and try again later.", "orange");
+      }
+    }
     window.log("An error occured during PSFree\nPlease refresh page and try again...\nError definition: " + error, "red");
     return 0;
   }
@@ -4829,7 +4854,7 @@ async function kexSuccess() {
       await new Promise(function(resolve) { setTimeout(resolve, 2000); });
 
       // Sending to elfldr
-      Loadpayloadlocal(payload_path, getPayloadName(payload_path));
+      Loadpayloadlocal(payload_path, getPayloadName(payload_path), 'jailbreak');
     } else {
       // Inject HEN payload
       const jb_step_status = await PayloadLoader(sessionStorage.getItem('payload_path'));
