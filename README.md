@@ -1,27 +1,73 @@
-# Alsherif Store — PS4 Exploit Host
+# Alsherif Store PS4 Host
 
-An Alsherif Store-branded PS4 browser host with firmware detection, exploit-chain selection, **GoldHEN-only** activation, payload tools, firmware-specific offline caching, language selection, and theme settings.
+An Alsherif Store themed browser host for PS4. It detects firmware, selects a configured exploit chain, offers GoldHEN as its only HEN option, and provides payload tools, language choices, themes, and firmware-specific offline caching.
 
-## Firmware coverage in this build
+> Firmware ranges describe the host's configured routes, not guaranteed results on every console model. Compatibility can vary by hardware revision. Use only with a console you own and understand the risks of running homebrew payloads.
 
-- Existing exploit chains are retained for their original firmware ranges.
-- **SlopKit Afterglow** is added for PS4 firmware **14.00 and 14.02**.
-- The Afterglow source supplied with the supplied upstream source snapshot also contains a 13.52 kernel table, but this host keeps its existing GoldHEN policy and does not enable 13.52 because the matching v2.4b18.11 payload is not bundled.
-- GoldHEN v2.4b18.14 is the default payload. v2.4b18.13 and v2.4b18.12 are selectable where allowed by the host's firmware policy.
-- The host does not offer PS4HEN, nexHEN, or another HEN flavor.
+## Features
 
-**Compatibility note:** The presence of an exploit chain and payload in this repository is not a guarantee of successful execution on every console revision. The new Afterglow path and GoldHEN payloads have not been hardware-tested by this repository's maintainer. Test on a console you own and keep a recovery plan.
+- Automatic PS4 firmware detection and exploit-chain selection
+- GoldHEN-only activation with firmware-specific version limits
+- Payload tools, homebrew installers, Linux loaders, and optional advanced payloads
+- Offline AppCache manifests organized by firmware family
+- Alsherif Store banner, layouts, themes, and multiple interface languages
 
-## Offline cache
+## Firmware coverage
 
-Firmware 14.00 and 14.02 use `includes/caches/cache140x.html` and `includes/caches/manifest/140x.manifest`. The manifest includes the Afterglow modules and the GoldHEN payload files used by this build. If any referenced asset is renamed or moved, regenerate/update the manifest and bump its version comment so PS4 AppCache can refresh.
+The host configures the following exploit-chain ranges:
 
-## Deployment
+| Firmware range | Configured chain |
+| --- | --- |
+| 4.50–5.07 | BPF Double Free |
+| 6.70–6.72 | BadHoist |
+| 7.00–9.60 | PSFree Lapse (modular or bundled) |
+| 9.00–11.02 | CSSFontFace |
+| 11.00–12.02 | SlopKit Lapse |
+| 12.50–13.00 | SlopKit Netctrl |
+| 13.02–13.52 | Relapse |
+| 14.00 and 14.02 | SlopKit Afterglow |
 
-This repository is a static site and can be deployed with GitHub Pages. Serve the repository root as the site root. For a public GitHub Pages deployment, make sure the Pages source points at the branch/folder containing `index.html`.
+GoldHEN availability is separately restricted by the host. The configured GoldHEN launch ranges are **5.05–5.07, 6.70–6.72, 7.00–12.02, 12.50–13.00, 13.02–13.50, 14.00, and 14.02**. Firmware 13.52 is not enabled because this repository does not include the matching GoldHEN v2.4b18.11 payload.
 
-## License and acknowledgements
+### GoldHEN versions
 
-This repository includes modified upstream code and third-party exploit/payload components. The applicable upstream license is retained in `LICENSE`; review the license and source headers before redistribution or public hosting. Alsherif Store branding does not imply ownership of the underlying exploit code or payloads.
+The default is v2.4b18.14. The host also includes v2.4b18.13, v2.4b18.12, v2.4b18.10, and v2.4b18.6–v2.4b18.9. The selector enforces these limits:
 
-The Afterglow implementation is credited in its source to **well0nez** and **m0zz**. The broader host and exploit implementations retain their original contributors' notices. GoldHEN is by **SiSTR0 / the GoldHEN team**. See the individual source files for implementation-specific attribution.
+- Firmware 14.02: v2.4b18.14 only
+- Firmware 14.00: v2.4b18.13 or v2.4b18.14
+- Firmware above 13.00 through 13.50: v2.4b18.12, v2.4b18.13, or v2.4b18.14
+- Other supported firmware: the versions allowed by the host's selector
+
+Payload hashes for the v2.4b18.13 and v2.4b18.14 files are recorded in [SHA256SUMS.txt](./SHA256SUMS.txt).
+
+## Use on PS4
+
+1. Open the deployed host URL in the PS4 browser.
+2. Allow the firmware-specific cache process to finish on first use. The first cache requires a network connection.
+3. Select **Launch GoldHEN** and wait for the status screen to report the result.
+4. Use **Update Cache** after a site update if the browser is still loading an older cached copy.
+
+The cache pages are under `includes/caches/`; firmware routing is defined in `includes/js/firmware.js`. The associated AppCache manifests are under `includes/caches/manifest/`. When cached files or their paths change, update the relevant manifests and their version comments so the PS4 browser can refresh its cache.
+
+## Deploy with GitHub Pages
+
+This is a static website. Keep `index.html` at the published site root and publish the repository root from the selected branch in **Settings → Pages**. No server-side build is required for a normal deployment.
+
+For step-by-step publishing instructions, see [DEPLOY-GITHUB-PAGES.txt](./DEPLOY-GITHUB-PAGES.txt). The site can also be served by another static web server.
+
+GitHub Pages uses HTTPS. Some local-network payload delivery or scanning features may be restricted by browser security when the page is opened over HTTPS; GitHub Pages does not provide a local-network backend.
+
+## Development
+
+The site is plain HTML, CSS, and JavaScript. The Babel build updates the legacy-browser version of the jailbreak dispatcher after changes to `includes/js/jailbreak.js`:
+
+```sh
+npm ci
+npm run build
+```
+
+## Source and license
+
+See [SOURCE-AND-LICENSE.md](./SOURCE-AND-LICENSE.md) and [LICENSE](./LICENSE). Keep the original copyright and license notices in source files when modifying or redistributing this project. Bundled payloads and third-party assets may have separate terms; consult their notices before redistribution.
+
+The SlopKit Afterglow implementation credits **well0nez** and **m0zz**. GoldHEN is by **SiSTR0 and the GoldHEN team**. Other source files retain their own contributor notices.
